@@ -43,7 +43,17 @@ Contains: PDFs (~2.3 GB), images (~15 MB), original videos (~1.2 GB), videos-wit
 gdown --folder --continue "https://drive.google.com/drive/folders/1j-cW20aJ1tGMDag6cTldIKtXMMFdpRKo"
 ```
 
-If you keep hitting the wall on the same file, wait 24h and retry, or open that specific file in a browser (Google's "Anyone with the link" path is more permissive interactively than via the gdown unauthenticated API).
+If you keep hitting the wall on the same file, wait 24h and retry, or open that specific file in a browser (Google's "Anyone with the link" path is more permissive interactively than via the gdown unauthenticated API). The Drive web UI's "Download all" gives you a multi-part `.zip` set (~5 GB across 3 zips) which sidesteps the API rate limit entirely.
+
+**Per-file fallback mirrors.** If the Drive folder is missing individual files, two CDN mirrors host them directly as binaries:
+
+- **Cloudflare Workers** (`ufofiles.sales-d08.workers.dev/release_1/<filename>.pdf`) — fronts showmeufos.com. Has most files but not all (returns 404 on some, e.g. `65_hs1-834228961_62-hq-83894_serial_153.pdf` and `dow-uap-d20-mission-report-southern-united-states-2020.pdf`).
+- **[BruceLanLan/uap-declassified-2026](https://github.com/BruceLanLan/uap-declassified-2026)** — PDFs committed directly into the repo (no LFS, no CDN). Fetchable via:
+  ```bash
+  curl -L -o "<filename>.pdf" \
+    "https://github.com/BruceLanLan/uap-declassified-2026/raw/master/files/<filename>.pdf"
+  ```
+  Used here to recover the two files the Workers CDN was missing.
 
 **[DenisSergeevitch/UFO-USA](https://github.com/DenisSergeevitch/UFO-USA)** — full OCR'd markdown of all 4,185 PDF pages (Gemini-converted). Best for analysis/search if you don't need original binaries. Also ships with `metadata/uap-csv.csv` and `metadata/pdf_manifest.tsv` containing all 162 source URLs.
 
