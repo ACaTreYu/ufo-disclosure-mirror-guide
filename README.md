@@ -36,6 +36,15 @@ gdown --folder "https://drive.google.com/drive/folders/1j-cW20aJ1tGMDag6cTldIKtX
 
 Contains: PDFs (~2.3 GB), images (~15 MB), original videos (~1.2 GB), videos-with-music (~1.3 GB). Total ~5 GB. No sign-in needed.
 
+**Caveat — Google Drive rate limit.** On a fresh download you'll often hit Drive's "too many accesses" / "Cannot retrieve the public link of the file" error mid-way (it kicked in for me at ~1.8 GB / 35 files on 2026-05-15). This is a per-file 24-hour quota on heavily-trafficked public files. Workarounds:
+
+```bash
+# Re-run with --continue; gdown skips files already on disk and retries the rest.
+gdown --folder --continue "https://drive.google.com/drive/folders/1j-cW20aJ1tGMDag6cTldIKtXMMFdpRKo"
+```
+
+If you keep hitting the wall on the same file, wait 24h and retry, or open that specific file in a browser (Google's "Anyone with the link" path is more permissive interactively than via the gdown unauthenticated API).
+
 **[DenisSergeevitch/UFO-USA](https://github.com/DenisSergeevitch/UFO-USA)** — full OCR'd markdown of all 4,185 PDF pages (Gemini-converted). Best for analysis/search if you don't need original binaries. Also ships with `metadata/uap-csv.csv` and `metadata/pdf_manifest.tsv` containing all 162 source URLs.
 
 ```bash
