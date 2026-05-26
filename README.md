@@ -2,7 +2,7 @@
 
 A practical, hands-on status report on **which public mirrors actually work** for downloading the major government UFO/UAP disclosures around the world — and which ones look promising but are broken, paywalled, or geo-blocked.
 
-Compiled while building the [Arcbound Interactive UFO Archive](https://arcboundinteractive.com/ufo-archive.html) (a private mirror page, not publicly linked). All download attempts logged below were made on **2026-05-15**.
+Compiled while building the [Arcbound Interactive UFO Archive](https://arcboundinteractive.com/ufo-archive.html) (a private mirror page, not publicly linked). The Release 01 attempts logged below were made on **2026-05-15**; the **PURSUE Release 02** section was added on **2026-05-25** after the May 22 drop.
 
 ---
 
@@ -11,6 +11,7 @@ Compiled while building the [Arcbound Interactive UFO Archive](https://arcboundi
 | Country | Source we used | Size pulled | Status |
 |---|---|---:|---|
 | 🇺🇸 USA — PURSUE Release 01 (war.gov) | [Co-Messi Google Drive](https://drive.google.com/drive/folders/1j-cW20aJ1tGMDag6cTldIKtXMMFdpRKo) | ~5 GB | ✅ |
+| 🇺🇸 USA — PURSUE Release 02 (war.gov) | direct from war.gov (headed) + DVIDS — **no public mirror yet** | ~5.4 GB | ⚠️ direct-only |
 | 🇧🇷 Brazil — Arquivo Nacional | [IA: `BrazilianUFOFiles`](https://archive.org/details/BrazilianUFOFiles) | ~1.9 GB | ✅ |
 | 🇬🇧 UK — MoD UFO Desk (DEFE 24, 31, etc.) | [IA: `BritishUFOFiles`](https://archive.org/details/BritishUFOFiles) | ~5.3 GB | ✅ |
 | 🇨🇦 Canada — Library & Archives Canada | [IA: `CanadaUFO`](https://archive.org/details/CanadaUFO) | ~1.0 GB | ✅ |
@@ -23,7 +24,7 @@ Compiled while building the [Arcbound Interactive UFO Archive](https://arcboundi
 | 🇮🇪 Ireland — Defence Forces FOIA 2007 | [IA: `IrishUFOFiles`](https://archive.org/details/IrishUFOFiles) | ~15 MB | ✅ |
 | 🇮🇹 Italy — Cabinet RS/33 press review | [IA: `mujssolinis-ufo-files-italian-press-review`](https://archive.org/details/mujssolinis-ufo-files-italian-press-review) | ~25 MB | ⚠️ Third-party press review, not direct government release |
 
-**Total: ~15.7 GB across 924 files / 12 countries.**
+**Total: ~21.1 GB across 988 files / 12 countries** (adding PURSUE Release 02's 64 files / ~5.4 GB to the original 924).
 
 Internet Archive bulk downloads use the [`internetarchive`](https://archive.org/developers/internetarchive/) CLI:
 
@@ -36,13 +37,15 @@ ia download <COLLECTION_ID> --source=original
 
 ---
 
-## 🇺🇸 USA — PURSUE Release 01 (May 8, 2026)
+## 🇺🇸 USA — PURSUE (war.gov)
 
-162 declassified files (120 PDFs, 28 videos, 14 images), ~2.3 GiB on disk. Released by the US Department of War under the PURSUE program (Presidential Unsealing and Reporting System for UAP Encounters).
+Released by the US Department of War under the PURSUE program (Presidential Unsealing and Reporting System for UAP Encounters). Official portal: <https://www.war.gov/UFO/> — additional files drop on a rolling basis. Two releases so far (~222 documents combined).
 
-Official portal: <https://www.war.gov/UFO/>
+### Release 01 (May 8, 2026)
 
-### ✅ What worked
+162 declassified files (120 PDFs, 28 videos, 14 images), ~2.3 GiB on disk.
+
+#### ✅ What worked
 
 **[Co-Messi/uap-pursue-release-01](https://github.com/Co-Messi/uap-pursue-release-01)** — pointer repo to a public Google Drive folder containing PDFs (~2.3 GB), images (~15 MB), original videos (~1.2 GB), and music-overlay videos (~1.3 GB). Total ~5 GB.
 
@@ -64,12 +67,39 @@ gdown --folder "https://drive.google.com/drive/folders/1j-cW20aJ1tGMDag6cTldIKtX
 
 **Metadata** (titles, agency, incident dates, blurbs): **[DenisSergeevitch/UFO-USA](https://github.com/DenisSergeevitch/UFO-USA)** — markdown OCR of all 4,185 PDF pages plus `metadata/uap-csv.csv` and `metadata/pdf_manifest.tsv`.
 
-### ❌ What didn't work
+#### ❌ What didn't work
 
 - **[ckpxgfnksd-max/uap-release-01](https://github.com/ckpxgfnksd-max/uap-release-01)** — LFS budget exhausted; clone works but `git lfs pull` fails on first object.
 - **Direct fetch from `www.war.gov`** — Akamai-fronted, IP-level blocked from at least some non-US/cloud egress points. Plain curl, browser-UA-spoofed curl, and PowerShell `Invoke-WebRequest` (different TLS stack) all 403'd. Even the landing page. From a residential US IP in a real browser it works fine.
 - **[zexiro/uap-disclosure-archive](https://github.com/zexiro/uap-disclosure-archive)** — binaries live on Railway, not Git.
 - **[vfp2/pursue-ufo-files](https://github.com/vfp2/pursue-ufo-files)** — npm-based scraper that drives headless Chromium against war.gov. Inherits the same Akamai problem.
+
+### Release 02 (May 22, 2026)
+
+The second PURSUE drop. Highlights: the **Lake Huron F-16 shootdown** clip (first released footage of a US military aircraft engaging a UAP), submarine **transmedium** footage of spheres entering/exiting water, 116 pages of Sandia "green orb" Cold War investigations (209 sightings, 1948–1950), and **Apollo 12** crew audio describing "streaks of lights." Spans War Dept., NASA, DOE, CIA, and ODNI.
+
+I pulled **64 files — 51 videos, 7 audio, 6 PDFs — ~5.4 GB on disk.**
+
+Direct page: <https://www.war.gov/UFO/?releaseDate=Release+02>
+
+#### ⚠️ No public bulk mirror yet
+
+Unlike Release 01, there is **no** community Google Drive / GitHub bundle for Release 02 as of 2026-05-25:
+
+- **[Co-Messi/uap-pursue](https://github.com/Co-Messi/uap-pursue)** (the renamed Release-01 repo) still only covers Release 01.
+- **[BruceLanLan/uap-declassified-2026](https://github.com/BruceLanLan/uap-declassified-2026)** is Release 01 only.
+- **[warufo.com](https://warufo.com/)** and **[ufo-declassified.com](https://ufo-declassified.com/)** are *analysis / search* layers — they front `war.gov/medialink/` links and organize the 222 docs thematically, but don't host the originals for bulk download.
+
+So the only source is war.gov itself.
+
+#### ✅ What worked — pulling direct from war.gov
+
+The Akamai cloud-egress block from Release 01 still applies (plain curl and cloud-IP requests 403, landing page included). What worked was driving a **headed** browser from a residential IP:
+
+- **PDFs + metadata** — headed [Playwright](https://playwright.dev/) against `war.gov/UFO/?releaseDate=Release+02`, scraping the per-file cards for titles, agency, incident date, and blurbs. Headless inherits the same Akamai 403, so run it headed (or capture from a real residential browser session).
+- **Videos + audio** — these don't sit on war.gov directly; they stream from **DVIDS** as HLS. Grab the `.m3u8` playlist the player loads and pull the backing **CloudFront** `.mp4` (standard HLS capture, e.g. `ffmpeg -i "<playlist>.m3u8" -c copy out.mp4`, or fetch the CloudFront origin mp4 directly). The audio items are MP4-wrapped too (`NASA-UAP-D0xx.mp4`).
+
+If a public Release 02 mirror surfaces, open a PR — until then, residential-IP + DVIDS is the path.
 
 ---
 
@@ -213,4 +243,4 @@ If you find a bulk source for any of these, open an issue / PR.
 
 ## Provenance
 
-This guide was assembled by attempting each of the above downloads in sequence on 2026-05-15. Status reflects what worked *that day* — LFS budgets get topped up, mirrors get taken down, Akamai rules change. If you find a mirror that's flipped status, PRs welcome.
+This guide was assembled by attempting each of the above downloads in sequence on 2026-05-15, with the PURSUE Release 02 section added 2026-05-25. Status reflects what worked *those days* — LFS budgets get topped up, mirrors get taken down, Akamai rules change. If you find a mirror that's flipped status, PRs welcome.
