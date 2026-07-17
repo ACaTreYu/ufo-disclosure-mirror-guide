@@ -2,7 +2,7 @@
 
 A practical, hands-on status report on **which public mirrors actually work** for downloading the major government UFO/UAP disclosures around the world — and which ones look promising but are broken, paywalled, or geo-blocked.
 
-Compiled while building the [Arcbound Interactive UFO Archive](https://arcboundinteractive.com/ufo-archive.html) (a private mirror page, not publicly linked). The Release 01 attempts logged below were made on **2026-05-15**; the **PURSUE Release 02** section was added on **2026-05-25** after the May 22 drop.
+Compiled while building the [Arcbound Interactive UFO Archive](https://arcboundinteractive.com/ufo-archive.html) (a private mirror page, not publicly linked). The Release 01 attempts logged below were made on **2026-05-15**; the **PURSUE Release 02** section was added on **2026-05-25** after the May 22 drop; **Release 03** was mirrored on **2026-06-15** and **Release 04** on **2026-07-16**.
 
 ---
 
@@ -12,6 +12,8 @@ Compiled while building the [Arcbound Interactive UFO Archive](https://arcboundi
 |---|---|---:|---|
 | 🇺🇸 USA — PURSUE Release 01 (war.gov) | [Co-Messi Google Drive](https://drive.google.com/drive/folders/1j-cW20aJ1tGMDag6cTldIKtXMMFdpRKo) | ~5 GB | ✅ |
 | 🇺🇸 USA — PURSUE Release 02 (war.gov) | direct from war.gov (headed) + DVIDS — **no public mirror yet** | ~5.4 GB | ⚠️ direct-only |
+| 🇺🇸 USA — PURSUE Release 03 (war.gov) | direct from war.gov (headed) + DVIDS — **no public mirror yet** | ~5.5 GB | ⚠️ direct-only |
+| 🇺🇸 USA — PURSUE Release 04 (war.gov) | direct from war.gov (headed) + DVIDS — **no public mirror yet** | ~1.7 GB | ⚠️ direct-only |
 | 🇧🇷 Brazil — Arquivo Nacional | [IA: `BrazilianUFOFiles`](https://archive.org/details/BrazilianUFOFiles) | ~1.9 GB | ✅ |
 | 🇬🇧 UK — MoD UFO Desk (DEFE 24, 31, etc.) | [IA: `BritishUFOFiles`](https://archive.org/details/BritishUFOFiles) | ~5.3 GB | ✅ |
 | 🇨🇦 Canada — Library & Archives Canada | [IA: `CanadaUFO`](https://archive.org/details/CanadaUFO) | ~1.0 GB | ✅ |
@@ -24,7 +26,7 @@ Compiled while building the [Arcbound Interactive UFO Archive](https://arcboundi
 | 🇮🇪 Ireland — Defence Forces FOIA 2007 | [IA: `IrishUFOFiles`](https://archive.org/details/IrishUFOFiles) | ~15 MB | ✅ |
 | 🇮🇹 Italy — Cabinet RS/33 press review | [IA: `mujssolinis-ufo-files-italian-press-review`](https://archive.org/details/mujssolinis-ufo-files-italian-press-review) | ~25 MB | ⚠️ Third-party press review, not direct government release |
 
-**Total: ~21.1 GB across 988 files / 12 countries** (adding PURSUE Release 02's 64 files / ~5.4 GB to the original 924).
+**Total: ~28.2 GB across 1,101 files / 12 countries** (the original 924 + PURSUE Release 02's 64 / ~5.4 GB + Release 03's 72 / ~5.5 GB + Release 04's 40 / ~1.7 GB).
 
 Internet Archive bulk downloads use the [`internetarchive`](https://archive.org/developers/internetarchive/) CLI:
 
@@ -39,7 +41,7 @@ ia download <COLLECTION_ID> --source=original
 
 ## 🇺🇸 USA — PURSUE (war.gov)
 
-Released by the US Department of War under the PURSUE program (Presidential Unsealing and Reporting System for UAP Encounters). Official portal: <https://www.war.gov/UFO/> — additional files drop on a rolling basis. Two releases so far (~222 documents combined).
+Released by the US Department of War under the PURSUE program (Presidential Unsealing and Reporting System for UAP Encounters). Official portal: <https://www.war.gov/UFO/> — additional files drop on a rolling basis. Four releases so far (334 records combined per the site's own CSV).
 
 ### Release 01 (May 8, 2026)
 
@@ -100,6 +102,33 @@ The Akamai cloud-egress block from Release 01 still applies (plain curl and clou
 - **Videos + audio** — these don't sit on war.gov directly; they stream from **DVIDS** as HLS. Grab the `.m3u8` playlist the player loads and pull the backing **CloudFront** `.mp4` (standard HLS capture, e.g. `ffmpeg -i "<playlist>.m3u8" -c copy out.mp4`, or fetch the CloudFront origin mp4 directly). The audio items are MP4-wrapped too (`NASA-UAP-D0xx.mp4`).
 
 If a public Release 02 mirror surfaces, open a PR — until then, residential-IP + DVIDS is the path.
+
+### Release 03 (June 12, 2026)
+
+The third drop ([official announcement](https://www.war.gov/News/Releases/Release/Article/4515408/department-of-war-publishes-third-release-of-unidentified-anomalous-phenomena-f/)). **72 files — 53 PDFs, 10 images, 6 videos, 3 audio — ~5.5 GB on disk.** Highlights: CIA Cold War-era assessments (including **Project Blue Book Special Report No. 14**), the Department of War "Western United States Event" narrative statements, FBI orb-sighting reports with digital renderings & recreation video, and NASA **Apollo-16** debriefing audio plus a 1962 Gordon Cooper interview excerpt.
+
+#### ⚠️ Still no public bulk mirror
+
+Same story as Release 02 — checked 2026-06-15:
+
+- **[vfp2/pursue-ufo-files](https://github.com/vfp2/pursue-ufo-files)** remains Release-01-only (don't use its index for R02+).
+- **[warufo.com](https://warufo.com/)** / **[ufo-declassified.com](https://ufo-declassified.com/)** track the new files but still front `war.gov/medialink/` links.
+
+#### Acquisition notes
+
+- The site's single-source-of-truth CSV was **renamed** from `uap-csv.csv` to **`uap-data.csv`** (`https://www.war.gov/Portals/1/Interactive/2026/UFO/uap-data.csv`) and gained a leading `Featured` column — column indices shifted by one if you had a Release-02-era parser.
+- PDFs/images: headed-browser in-page fetch from `war.gov/medialink/ufo/061226/release_03/documents/…` (Akamai still 403s everything cloud/curl).
+- Videos/audio: DVIDS `.m3u8` → CloudFront `.mp4`, as with Release 02. Note the CSV keys media by dvidshub **video-id** while the CloudFront assets are named by DVIDS **media-asset-id** (`DOD_…`) — resolve one to the other via the dvidshub video page or playlist.
+
+### Release 04 (July 10, 2026)
+
+The fourth drop. **40 files — 14 PDFs, 3 images, 19 videos, 4 audio — ~1.7 GB on disk** (28 Department of War, 7 NASA, 2 CIA, 2 DOE, 1 FBI; per DoW ~48% are partially redacted to protect witnesses and platforms). Highlights: the 1948 **Project Sign** progress report and 1948–49 USAF "Analysis of Flying Object Incidents" studies, the 1966–67 Air Force **Project Blue Book review committee** deliberations, CIA 1955 "flying saucer" debriefs, NASA **STS-80** unidentified-object imagery from Space Shuttle Columbia, 19 Navy / NORTHCOM / INDOPACOM UAP FLIR clips (Yellow Sea, East & South China Sea, both US coasts), **Apollo 14 & 17** crew-debriefing audio, and DOE Los Alamos (1949) & Pantex (2015) records.
+
+#### ⚠️ Still no community mirror (checked 2026-07-16) — but war.gov now ships bulk zips
+
+Community mirrors have not kept up — the Release-01 repos are unchanged and the analysis sites ([warufo.com](https://www.warufo.com/) now covers all four releases) still link back to war.gov.
+
+The good news: for Release 04, **war.gov itself offers bulk zip bundles** (e.g. `release_04_documents_071026.zip` ~238 MB and `uap_release04_videos_071026.zip` ~1.5 GB), so a browser on a residential IP can grab the whole drop in two downloads — no more per-file scraping. The Akamai rules are unchanged, so curl/cloud egress still 403s; and the video zip names files by DVIDS **media-asset-id** (`DOD_…`), so you still need the dvidshub video-id → asset-id mapping (via each video's `.m3u8`) to match them back to the CSV rows. The CSV now serves with a `?release=4` query parameter but keeps the same 29-column layout as Release 03.
 
 ---
 
@@ -243,4 +272,4 @@ If you find a bulk source for any of these, open an issue / PR.
 
 ## Provenance
 
-This guide was assembled by attempting each of the above downloads in sequence on 2026-05-15, with the PURSUE Release 02 section added 2026-05-25. Status reflects what worked *those days* — LFS budgets get topped up, mirrors get taken down, Akamai rules change. If you find a mirror that's flipped status, PRs welcome.
+This guide was assembled by attempting each of the above downloads in sequence on 2026-05-15, with the PURSUE Release 02 section added 2026-05-25, Release 03 added 2026-06-15/07-16, and Release 04 added 2026-07-16. Status reflects what worked *those days* — LFS budgets get topped up, mirrors get taken down, Akamai rules change. If you find a mirror that's flipped status, PRs welcome.
