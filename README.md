@@ -10,7 +10,7 @@ Compiled while building the [Arcbound Interactive UFO Archive](https://arcboundi
 
 | Country | Source we used | Size pulled | Status |
 |---|---|---:|---|
-| 🇺🇸 USA — PURSUE Release 01 (war.gov) | [Co-Messi Google Drive](https://drive.google.com/drive/folders/1j-cW20aJ1tGMDag6cTldIKtXMMFdpRKo) | ~5 GB | ✅ |
+| 🇺🇸 USA — PURSUE Releases 01–05 (war.gov) | [Co-Messi Google Drive](https://drive.google.com/drive/folders/1j-cW20aJ1tGMDag6cTldIKtXMMFdpRKo) for R01; war.gov + DVIDS direct for R02–R05 | 18.0 GB | ✅ |
 | 🇧🇷 Brazil — Arquivo Nacional | [IA: `BrazilianUFOFiles`](https://archive.org/details/BrazilianUFOFiles) | ~1.9 GB | ✅ |
 | 🇬🇧 UK — MoD UFO Desk (DEFE 24, 31, etc.) | [IA: `BritishUFOFiles`](https://archive.org/details/BritishUFOFiles) | ~5.3 GB | ✅ |
 | 🇨🇦 Canada — Library & Archives Canada | [IA: `CanadaUFO`](https://archive.org/details/CanadaUFO) | ~1.0 GB | ✅ |
@@ -23,7 +23,7 @@ Compiled while building the [Arcbound Interactive UFO Archive](https://arcboundi
 | 🇮🇪 Ireland — Defence Forces FOIA 2007 | [IA: `IrishUFOFiles`](https://archive.org/details/IrishUFOFiles) | ~15 MB | ✅ |
 | 🇮🇹 Italy — Cabinet RS/33 press review | [IA: `mujssolinis-ufo-files-italian-press-review`](https://archive.org/details/mujssolinis-ufo-files-italian-press-review) | ~25 MB | ⚠️ Third-party press review, not direct government release |
 
-**Total: ~15.7 GB across 924 files / 12 countries.**
+**Total: 28.9 GB across 1,142 files / 12 countries** — 941 documents (80,465 pages), 148 videos, 39 images, 14 audio recordings. Counts and byte sizes are measured from the mirrored files on disk; page counts are read from the PDFs themselves rather than taken from upstream summaries. Six of those files are broken at source — see [File integrity](#file-integrity--what-is-actually-broken-in-these-mirrors).
 
 Internet Archive bulk downloads use the [`internetarchive`](https://archive.org/developers/internetarchive/) CLI:
 
@@ -36,11 +36,45 @@ ia download <COLLECTION_ID> --source=original
 
 ---
 
-## 🇺🇸 USA — PURSUE Release 01 (May 8, 2026)
+## 🇺🇸 USA — PURSUE Releases 01–05 (May–Aug. 2026)
 
-162 declassified files (120 PDFs, 28 videos, 14 images), ~2.3 GiB on disk. Released by the US Department of War under the PURSUE program (Presidential Unsealing and Reporting System for UAP Encounters).
+Released by the US Department of War under the PURSUE program (Presidential Unsealing and Reporting System for UAP Encounters). Five tranches to date, 416 files / 18.0 GB mirrored (224 documents totalling 8,751 pages, 148 videos, 30 images, 14 audio recordings):
+
+| Release | Date | Files | Contributing bodies |
+|---|---|---:|---|
+| 01 | May 8, 2026 | 162 | FBI, DoW, NASA, NARA, State |
+| 02 | May 22, 2026 | 64 | DoW (51 IR videos), NASA (Apollo audio), CIA, ODNI, DoE |
+| 03 | June 12, 2026 | 72 | CIA, DoW, FBI, NASA |
+| 04 | July 10, 2026 | 40 | DoW, NASA, CIA, DoE, FBI |
+| 05 | Aug. 7, 2026 | 41 | DoW, FBI, CIA, State, Executive Office of the President |
 
 Official portal: <https://www.war.gov/UFO/>
+
+### Release metadata — the CSV
+
+The portal is a DataTables front-end over a single CSV that covers **every** release:
+
+```
+https://www.war.gov/Portals/1/Interactive/2026/UFO/uap-data.csv?release=5
+```
+
+29 columns; the useful ones are Release Date, Title, Type (`PDF`/`IMG`/`VID`/`AUD`), Description Blurb, DVIDS Video ID, Agency, Incident Date, Incident Location, and `PDF | Image Link`. Bump `?release=N` as new tranches land. Documents and images join to files on disk by the basename of `PDF | Image Link`.
+
+Same Akamai caveat as the portal itself — the CSV 403s to curl and to any non-browser fetch, including with a spoofed browser UA and a `Referer`. Pull it from a real browser session on a residential IP.
+
+### Video and audio — resolving DVIDS ids
+
+From Release 02 onward the AV assets are hosted on DVIDS, not war.gov, and download under opaque CloudFront names (`DOD_111887401.mp4`). The CSV gives a DVIDS video id per row, not a filename. To map one to the other, fetch the DVIDS page and read the asset path out of it:
+
+```
+https://www.dvidshub.net/video/{dvids_id}
+  -> https://d34w7g4gy10iej.cloudfront.net/video/2608/DOD_111887401/DOD_111887401.mp4
+```
+
+Two things worth knowing:
+
+- A DVIDS page also links **related** videos, so a naive `DOD_\d+` grep over the HTML returns several ids. Match the canonical asset with a backreference — `/(DOD_\d+)/\1\.mp4` — rather than taking the first hit.
+- Cross-check each resolved id against the DVIDS page `<title>`, which carries the war.gov canonical id (`DOW-UAP-PR117, Unresolved UAP Report, Gulf of Oman, 2021`). If the title and the CSV title agree for all rows, the mapping is sound. Rename to the canonical id on disk; the CloudFront names carry no meaning.
 
 ### ✅ What worked
 
@@ -75,21 +109,27 @@ gdown --folder "https://drive.google.com/drive/folders/1j-cW20aJ1tGMDag6cTldIKtX
 
 ## 🇧🇷 Brazil — Arquivo Nacional
 
-Brazilian Air Force / Ministry of Defense files including the Operação Prato / Colares (1977–78) materials. ~20,000+ pages on ~893 sightings, declassifications rolling since 2009.
+Brazilian Air Force / Ministry of Defense files including the Operação Prato / Colares (1977–78) materials. Transfers to the Arquivo Nacional have been rolling since 2009 under Ordinance 551/GC3, which puts all military branches under a standing order to hand over UAP material.
 
-**[IA: `BrazilianUFOFiles`](https://archive.org/details/BrazilianUFOFiles)** — multi-item collection (142 zipped sub-items + their metadata + OCR derivatives). Originally pulled 1.5 GB / 846 files with default flags; re-ran with `--source=original` to get the 232 actual source PDFs (~1.9 GB) and skip OCR/thumbnail/metadata noise.
+**[IA: `BrazilianUFOFiles`](https://archive.org/details/BrazilianUFOFiles)** — multi-item collection (142 zipped sub-items + their metadata + OCR derivatives). Originally pulled 1.5 GB / 846 files with default flags; re-ran with `--source=original` to get the 232 actual source PDFs (1.9 GB) and skip OCR/thumbnail/metadata noise.
 
-Official source: <http://sian.an.gov.br/sianex/consulta/login.asp>, reference code `BR DFANBSB ARX`. SIAN is session-based and fragile to scrape — use IA as the bulk source.
+**Mind the gap between the collection and the mirror.** The Arquivo Nacional's OVNI collection is catalogued at **893 documents spanning 1952–2023**, and a "~20,000+ pages" figure circulates widely (this guide repeated it in an earlier revision). The IA mirror is a *subset*: all 231 of its PDFs are structurally intact and parse cleanly, but they total **4,561 pages**, not 20,000. The shortfall is missing coverage, not corruption — do not treat `BrazilianUFOFiles` as the complete collection. The 893-document catalogue is the number to measure a full mirror against, and reaching it means going to SIAN directly.
+
+Official source: <http://sian.an.gov.br/sianex/consulta/login.asp>, reference code `BR DFANBSB ARX`. SIAN is session-based and fragile to scrape, which is why IA is the convenient bulk source — and why the mirror is partial.
 
 ---
 
 ## 🇬🇧 UK — MoD UFO Desk
 
-UK Ministry of Defence UFO records (DEFE 24, 31, etc.) covering 1980–2009, released through The National Archives in 8 tranches (2008–2013). ~40,500 pages claimed; the IA mirror pulled 5.3 GB across 233 PDFs.
+UK Ministry of Defence UFO records (DEFE 24, 31, etc.) covering 1980–2009, released through The National Archives in 8 tranches (2008–2013). The IA mirror pulled 5.3 GB across 233 PDFs; measured at **40,468 pages**, which is the one widely-quoted figure ("~40,500 pages") that survives contact with the actual files.
 
 - **[IA: `BritishUFOFiles`](https://archive.org/details/BritishUFOFiles)** — primary mirror used.
 - Also exists: `UkUfoDocumentsPart1` / `UkUfoDocumentsPart2` (separate IA items, partial overlap).
 - Official source: <https://www.nationalarchives.gov.uk/help-with-your-research/research-guides/ufos/>. TNA serves individual files but charges after a free-month window.
+
+**One file in the IA mirror is a truncated fragment.** `defe-31-184-1.pdf` is 5,891,072 bytes, has no `%%EOF`, and no PDF reader will open it (`code=7: Invalid number of pages`). It is not a copy error — the bytes on IA are what they are, dated 2015-12-27. The real record, [DEFE 31/184/1](https://discovery.nationalarchives.gov.uk/details/r/C11705543) ("UFO incidents; with redactions", 1994 Jan 12 – 1994 May 31), is a **240.5 MB** PDF at TNA. The IA copy is roughly 2.4% of it.
+
+Recovering it means going to TNA: the record is £3.50, or **free if you sign in** with a (free) TNA account, then Add to basket → checkout at £0 → download. There is no anonymous direct-download URL for it.
 
 ---
 
@@ -200,6 +240,46 @@ If you find a bulk source for any of these, open an issue / PR.
 
 ---
 
+## File integrity — what is actually broken in these mirrors
+
+A mirror that downloads without error is not the same as a mirror that *works*. Every PDF across all twelve countries was opened and page-counted; **6 of 941 are unusable**, and every one of them was already broken upstream — none was damaged in transit.
+
+| File | Country | Size on disk | Problem |
+|---|---|---:|---|
+| `defe-31-184-1.pdf` | 🇬🇧 UK | 5.9 MB | Truncated, no `%%EOF`, will not open. TNA original is 240.5 MB — see the UK section. |
+| `ufo-release-01/pdfs/65_hs1-834228961_62-hq-83894_serial_153.pdf` | 🇺🇸 USA | 8 KB | No `%%EOF`, parses to zero pages. This is the FBI "Serial 153" file that the Workers CDN 404'd on; the `BruceLanLan` fallback copy used to recover it is itself a stub. |
+| `detection_louange_1.pdf` | 🇫🇷 France | 278 B | Not a PDF — a 278-byte error stub. |
+| `detection_louange_5.pdf` | 🇫🇷 France | 278 B | Same. |
+| `rapport_Louange_1.pdf` | 🇫🇷 France | 278 B | Same. |
+| `stat_poher_71.pdf` | 🇫🇷 France | 278 B | Same. |
+
+The four French files are all exactly 278 bytes, which is the tell: a fixed-size "file" repeated across a collection is a server error page that got saved with a `.pdf` extension. GEIPAN's primary archive at <https://www.cnes-geipan.fr> is the place to re-fetch them.
+
+Worth stating plainly: **the other 935 PDFs are structurally sound**, including all 231 Brazilian files. Brazil's shortfall is missing coverage, not corruption.
+
+### Verifying a mirror yourself
+
+Two cheap checks catch essentially all of this. Byte-size alone catches none of it — several of these files are large enough to look fine in a directory listing.
+
+```python
+import os, fitz  # PyMuPDF
+
+def check(path):
+    with open(path, 'rb') as f:                 # 1. structural: is it terminated?
+        f.seek(max(0, os.path.getsize(path) - 2048))
+        if b'%%EOF' not in f.read():
+            return 'TRUNCATED'
+    try:                                        # 2. semantic: does it actually parse?
+        with fitz.open(path) as d:
+            return 'ZERO_PAGES' if d.page_count == 0 else f'ok ({d.page_count}p)'
+    except Exception as e:
+        return f'UNREADABLE ({e})'
+```
+
+Summing the page counts also gives you a real number to compare against whatever page total the collection advertises — which is how the Brazil discrepancy above surfaced.
+
+---
+
 ## Bigger lessons — evaluating any "mirror" repo
 
 1. **Read the README before cloning.** Watch for "LFS", "Google Drive", "Railway", "S3", "IPFS", "external", "download script" — that tells you where the binaries actually live.
@@ -207,10 +287,17 @@ If you find a bulk source for any of these, open an issue / PR.
 3. **LFS-backed repos on personal GitHub accounts are fragile** — the free LFS quota is 1 GB storage / 1 GB monthly bandwidth, and big public-interest mirrors blow through this in days. Expect 50–80% of LFS-backed mirrors to be quota-exhausted by the time you find them.
 4. **Google Drive folders** are the most reliable free hosting for ≤15 GB of binaries — the per-file rate limit is annoying but the Drive web "Download all" zip path sidesteps it.
 5. **`ia download --source=original`** is the right default for Internet Archive — saves you from dragging down JP2 zips, OCR derivatives, and metadata XML that you don't want.
-6. **Government portals fronted by Akamai/Cloudflare/CloudFront** (war.gov, some .gov.* sites) often refuse cloud-egress IPs. Don't assume curl from your laptop will work from a sandbox. Either pull from a residential IP or find a community mirror.
+6. **Government portals fronted by Akamai/Cloudflare/CloudFront** (war.gov, some .gov.* sites) often refuse cloud-egress IPs. Don't assume curl from your laptop will work from a sandbox. Either pull from a residential IP or find a community mirror. This applies to the portal's *data files* too, not just its HTML — war.gov's `uap-data.csv` 403s to curl even with a browser UA and a `Referer` set.
+7. **"Downloaded successfully" is not "usable".** Verify structurally (`%%EOF`) and semantically (does it parse, how many pages) — see [File integrity](#file-integrity--what-is-actually-broken-in-these-mirrors). 6 of our 941 PDFs were dead on arrival, and file size caught none of them.
+8. **Measure the collection, then compare it to the advertised total.** Page counts read off the mirrored PDFs are the honest number. Repeating an upstream "~20,000 pages" claim hid the fact that our Brazilian mirror held 4,561 — a coverage gap that looked like a complete mirror until someone counted.
+9. **Opaque CDN filenames need a resolution step, and that step needs a cross-check.** DVIDS hands you `DOD_111887401.mp4` with no indication of which record it is. Resolve via the id, then confirm against a second field (the page title vs. the CSV title) before you rename anything.
 
 ---
 
 ## Provenance
 
-This guide was assembled by attempting each of the above downloads in sequence on 2026-05-15. Status reflects what worked *that day* — LFS budgets get topped up, mirrors get taken down, Akamai rules change. If you find a mirror that's flipped status, PRs welcome.
+This guide was assembled by attempting each of the above downloads in sequence on 2026-05-15, and revised on 2026-08-27 to cover PURSUE Releases 02–05, to replace the quoted page totals with counts measured from the mirrored files, and to add the [File integrity](#file-integrity--what-is-actually-broken-in-these-mirrors) audit.
+
+Status reflects what worked *that day* — LFS budgets get topped up, mirrors get taken down, Akamai rules change. If you find a mirror that's flipped status, PRs welcome.
+
+Where this guide gives a figure for what a collection *should* contain (Brazil's 893 documents, DEFE 31/184/1's 240.5 MB), that number comes from the holding institution's own catalogue and is cited as such. Every other number here was measured from files on disk.
