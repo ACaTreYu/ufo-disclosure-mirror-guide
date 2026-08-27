@@ -11,7 +11,7 @@ Compiled while building the [Arcbound Interactive UFO Archive](https://arcboundi
 | Country | Source we used | Size pulled | Status |
 |---|---|---:|---|
 | 🇺🇸 USA — PURSUE Releases 01–05 (war.gov) | [Co-Messi Google Drive](https://drive.google.com/drive/folders/1j-cW20aJ1tGMDag6cTldIKtXMMFdpRKo) for R01; war.gov + DVIDS direct for R02–R05 | 18.0 GB | ✅ |
-| 🇧🇷 Brazil — Arquivo Nacional | [IA: `BrazilianUFOFiles`](https://archive.org/details/BrazilianUFOFiles) | ~1.9 GB | ✅ |
+| 🇧🇷 Brazil — Arquivo Nacional | [IA: `BrazilianUFOFiles`](https://archive.org/details/BrazilianUFOFiles) | 1.9 GB | ⚠️ Partial — subset of an 893-document catalogue; unpack the 5 RARs |
 | 🇬🇧 UK — MoD UFO Desk (DEFE 24, 31, etc.) | [IA: `BritishUFOFiles`](https://archive.org/details/BritishUFOFiles) | ~5.3 GB | ✅ |
 | 🇨🇦 Canada — Library & Archives Canada | [IA: `CanadaUFO`](https://archive.org/details/CanadaUFO) | ~1.0 GB | ✅ |
 | 🇪🇸 Spain — Ejército del Aire | [IA: `SpanishUFOFiles`](https://archive.org/details/SpanishUFOFiles) | ~788 MB | ✅ |
@@ -23,7 +23,7 @@ Compiled while building the [Arcbound Interactive UFO Archive](https://arcboundi
 | 🇮🇪 Ireland — Defence Forces FOIA 2007 | [IA: `IrishUFOFiles`](https://archive.org/details/IrishUFOFiles) | ~15 MB | ✅ |
 | 🇮🇹 Italy — Cabinet RS/33 press review | [IA: `mujssolinis-ufo-files-italian-press-review`](https://archive.org/details/mujssolinis-ufo-files-italian-press-review) | ~25 MB | ⚠️ Third-party press review, not direct government release |
 
-**Total: 28.9 GB across 1,142 files / 12 countries** — 941 documents (80,465 pages), 148 videos, 39 images, 14 audio recordings. Counts and byte sizes are measured from the mirrored files on disk; page counts are read from the PDFs themselves rather than taken from upstream summaries. Six of those files are broken at source — see [File integrity](#file-integrity--what-is-actually-broken-in-these-mirrors).
+**Total: 28.9 GB across 1,138 files / 12 countries** — 946 documents (80,689 pages), 148 videos, 30 images, 14 audio recordings. Counts and byte sizes are measured from the mirrored files on disk; page counts are read from the PDFs themselves rather than taken from upstream summaries. Six of those files are broken at source — see [File integrity](#file-integrity--what-is-actually-broken-in-these-mirrors).
 
 Internet Archive bulk downloads use the [`internetarchive`](https://archive.org/developers/internetarchive/) CLI:
 
@@ -113,7 +113,23 @@ Brazilian Air Force / Ministry of Defense files including the Operação Prato /
 
 **[IA: `BrazilianUFOFiles`](https://archive.org/details/BrazilianUFOFiles)** — multi-item collection (142 zipped sub-items + their metadata + OCR derivatives). Originally pulled 1.5 GB / 846 files with default flags; re-ran with `--source=original` to get the 232 actual source PDFs (1.9 GB) and skip OCR/thumbnail/metadata noise.
 
-**Mind the gap between the collection and the mirror.** The Arquivo Nacional's OVNI collection is catalogued at **893 documents spanning 1952–2023**, and a "~20,000+ pages" figure circulates widely (this guide repeated it in an earlier revision). The IA mirror is a *subset*: all 231 of its PDFs are structurally intact and parse cleanly, but they total **4,561 pages**, not 20,000. The shortfall is missing coverage, not corruption — do not treat `BrazilianUFOFiles` as the complete collection. The 893-document catalogue is the number to measure a full mirror against, and reaching it means going to SIAN directly.
+**`--source=original` is necessary but not sufficient — check what else is in the item.** Alongside the 231 PDFs, the item ships **five RAR archives** holding 224 page scans that no PDF-only pull will ever surface:
+
+| RAR | Contents | Pages |
+|---|---|---:|
+| `RELATÓRIO 1 prato01.rar` | Operação Prato mission reports, Part 01 | 151 |
+| `RELATÓRIO 2 prato02.rar` | Operação Prato mission reports, Part 02 | 54 |
+| `JORNAIS jornais.rar` | archived newspaper clippings | 8 |
+| `NPA - 09 - C npa.rar` | NPA-09 confidential reporting procedures + witness questionnaire | 6 |
+| `DIRETRIZ ESPECÍFICA 04 89 DE0489.rar` | Diretriz Específica nº 04/89, procedure for airspace control units | 5 |
+
+Four of the five also carry a short Portuguese `.txt` stating what the document is — the most reliable titling metadata in the whole Brazilian set, and it only exists inside the archives.
+
+Each folder is numbered JPG page scans. Assemble with [`img2pdf`](https://pypi.org/project/img2pdf/) rather than an image library: it embeds the original JPEG streams verbatim, so the result is a browsable PDF whose page images are byte-identical to the released scans. Sort pages on the integer in the filename, not lexically — otherwise "página 2" lands after "página 11". The entry names are mojibake (`p?gina`) from the original CP850 RAR headers, so trust only the digits.
+
+**Mind the gap between the collection and the mirror.** The Arquivo Nacional's OVNI collection is catalogued at **893 documents spanning 1952–2023**, and a "~20,000+ pages" figure circulates widely (this guide repeated it in an earlier revision). The IA mirror is a *subset*: all its PDFs are structurally intact and parse cleanly, but even with the RARs recovered they total **4,785 pages**, not 20,000. The shortfall is missing coverage, not corruption — do not treat `BrazilianUFOFiles` as the complete collection. Note also that the item was uploaded **2015-12-27**, so it cannot contain anything transferred since; the catalogue runs to 2023. The 893-document figure is what to measure a full mirror against, and reaching it means going to SIAN directly.
+
+An English-language index to the collection exists at [brazilianufoarchives.com](https://brazilianufoarchives.com/) — 495 case write-ups by Arthur Caria, summarising and translating the strictly-military files (1952–2015) with references back to SIAN. It hosts no files and its translations are offered for personal use with credit, so treat it as a finding aid, not a mirror.
 
 Official source: <http://sian.an.gov.br/sianex/consulta/login.asp>, reference code `BR DFANBSB ARX`. SIAN is session-based and fragile to scrape, which is why IA is the convenient bulk source — and why the mirror is partial.
 
@@ -242,7 +258,7 @@ If you find a bulk source for any of these, open an issue / PR.
 
 ## File integrity — what is actually broken in these mirrors
 
-A mirror that downloads without error is not the same as a mirror that *works*. Every PDF across all twelve countries was opened and page-counted; **6 of 941 are unusable**, and every one of them was already broken upstream — none was damaged in transit.
+A mirror that downloads without error is not the same as a mirror that *works*. Every PDF across all twelve countries was opened and page-counted; **6 of 946 are unusable**, and every one of them was already broken upstream — none was damaged in transit.
 
 | File | Country | Size on disk | Problem |
 |---|---|---:|---|
@@ -255,7 +271,13 @@ A mirror that downloads without error is not the same as a mirror that *works*. 
 
 The four French files are all exactly 278 bytes, which is the tell: a fixed-size "file" repeated across a collection is a server error page that got saved with a `.pdf` extension. GEIPAN's primary archive at <https://www.cnes-geipan.fr> is the place to re-fetch them.
 
-Worth stating plainly: **the other 935 PDFs are structurally sound**, including all 231 Brazilian files. Brazil's shortfall is missing coverage, not corruption.
+Worth stating plainly: **every other PDF is structurally sound**, including all 236 Brazilian files. Brazil's shortfall is missing coverage, not corruption.
+
+### Not every file in an item is archival content
+
+`ia download` also brings down `__ia_thumb.jpg` — the preview image the Internet Archive generates for each item's detail page. It is not part of any government release, but it lands in the folder next to the real originals and is easy to index as content. One had done exactly that in each of the nine IA-sourced country folders here, so the archive advertised 39 images when only 30 were released records, and the images view rendered nine tiles of Internet Archive site furniture.
+
+Filter it, along with any `*_meta.xml`, `*_meta.sqlite`, and `*_files.xml` that come with an item — those are IA's own catalogue records, not the government's.
 
 ### Verifying a mirror yourself
 
@@ -288,7 +310,7 @@ Summing the page counts also gives you a real number to compare against whatever
 4. **Google Drive folders** are the most reliable free hosting for ≤15 GB of binaries — the per-file rate limit is annoying but the Drive web "Download all" zip path sidesteps it.
 5. **`ia download --source=original`** is the right default for Internet Archive — saves you from dragging down JP2 zips, OCR derivatives, and metadata XML that you don't want.
 6. **Government portals fronted by Akamai/Cloudflare/CloudFront** (war.gov, some .gov.* sites) often refuse cloud-egress IPs. Don't assume curl from your laptop will work from a sandbox. Either pull from a residential IP or find a community mirror. This applies to the portal's *data files* too, not just its HTML — war.gov's `uap-data.csv` 403s to curl even with a browser UA and a `Referer` set.
-7. **"Downloaded successfully" is not "usable".** Verify structurally (`%%EOF`) and semantically (does it parse, how many pages) — see [File integrity](#file-integrity--what-is-actually-broken-in-these-mirrors). 6 of our 941 PDFs were dead on arrival, and file size caught none of them.
+7. **"Downloaded successfully" is not "usable".** Verify structurally (`%%EOF`) and semantically (does it parse, how many pages) — see [File integrity](#file-integrity--what-is-actually-broken-in-these-mirrors). 6 of our 946 PDFs were dead on arrival, and file size caught none of them.
 8. **Measure the collection, then compare it to the advertised total.** Page counts read off the mirrored PDFs are the honest number. Repeating an upstream "~20,000 pages" claim hid the fact that our Brazilian mirror held 4,561 — a coverage gap that looked like a complete mirror until someone counted.
 9. **Opaque CDN filenames need a resolution step, and that step needs a cross-check.** DVIDS hands you `DOD_111887401.mp4` with no indication of which record it is. Resolve via the id, then confirm against a second field (the page title vs. the CSV title) before you rename anything.
 
