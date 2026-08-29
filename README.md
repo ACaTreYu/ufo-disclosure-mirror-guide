@@ -2,7 +2,7 @@
 
 A practical, hands-on status report on **which public mirrors actually work** for downloading the major government UFO/UAP disclosures around the world — and which ones look promising but are broken, paywalled, or geo-blocked.
 
-Compiled while building the [Arcbound Interactive UFO Archive](https://arcboundinteractive.com/ufo-archive.html) (a private mirror page, not publicly linked). The Release 01 attempts logged below were made on **2026-05-15**; the **PURSUE Release 02** section was added on **2026-05-25** after the May 22 drop; **Release 03** was mirrored on **2026-06-15** and **Release 04** on **2026-07-16**.
+Compiled while building the [Arcbound Interactive Government UAP Disclosure Repository](https://arcboundinteractive.com/contact.html) (reached through the site's "Contact" nav). The Release 01 attempts logged below were made on **2026-05-15**; the **PURSUE Release 02** section was added on **2026-05-25** after the May 22 drop; **Release 03** was mirrored on **2026-06-15**, **Release 04** on **2026-07-16**, and **Release 05** on **2026-08-27** (guide updated 2026-08-29).
 
 ---
 
@@ -14,6 +14,7 @@ Compiled while building the [Arcbound Interactive UFO Archive](https://arcboundi
 | 🇺🇸 USA — PURSUE Release 02 (war.gov) | direct from war.gov (headed) + DVIDS — **no public mirror yet** | ~5.4 GB | ⚠️ direct-only |
 | 🇺🇸 USA — PURSUE Release 03 (war.gov) | direct from war.gov (headed) + DVIDS — **no public mirror yet** | ~5.5 GB | ⚠️ direct-only |
 | 🇺🇸 USA — PURSUE Release 04 (war.gov) | direct from war.gov (headed) + DVIDS — **no public mirror yet** | ~1.7 GB | ⚠️ direct-only |
+| 🇺🇸 USA — PURSUE Release 05 (war.gov) | war.gov bulk zips (headed browser) + DVIDS id resolution — **no public mirror** | ~646 MB | ⚠️ direct-only |
 | 🇧🇷 Brazil — Arquivo Nacional | [IA: `BrazilianUFOFiles`](https://archive.org/details/BrazilianUFOFiles) | ~1.9 GB | ✅ |
 | 🇬🇧 UK — MoD UFO Desk (DEFE 24, 31, etc.) | [IA: `BritishUFOFiles`](https://archive.org/details/BritishUFOFiles) | ~5.3 GB | ✅ |
 | 🇨🇦 Canada — Library & Archives Canada | [IA: `CanadaUFO`](https://archive.org/details/CanadaUFO) | ~1.0 GB | ✅ |
@@ -26,7 +27,7 @@ Compiled while building the [Arcbound Interactive UFO Archive](https://arcboundi
 | 🇮🇪 Ireland — Defence Forces FOIA 2007 | [IA: `IrishUFOFiles`](https://archive.org/details/IrishUFOFiles) | ~15 MB | ✅ |
 | 🇮🇹 Italy — Cabinet RS/33 press review | [IA: `mujssolinis-ufo-files-italian-press-review`](https://archive.org/details/mujssolinis-ufo-files-italian-press-review) | ~25 MB | ⚠️ Third-party press review, not direct government release |
 
-**Total: ~28.2 GB across 1,101 files / 12 countries** (the original 924 + PURSUE Release 02's 64 / ~5.4 GB + Release 03's 72 / ~5.5 GB + Release 04's 40 / ~1.7 GB).
+**Total: ~28.9 GB across 1,138 files / 12 countries** (the original 924 + PURSUE Release 02's 64 / ~5.4 GB + Release 03's 72 / ~5.5 GB + Release 04's 40 / ~1.7 GB + Release 05's 41 / ~646 MB, plus five Brazilian documents reassembled from RAR archives, minus nine `__ia_thumb.jpg` files that are Internet Archive furniture rather than released records — see the Brazil section).
 
 Internet Archive bulk downloads use the [`internetarchive`](https://archive.org/developers/internetarchive/) CLI:
 
@@ -41,7 +42,7 @@ ia download <COLLECTION_ID> --source=original
 
 ## 🇺🇸 USA — PURSUE (war.gov)
 
-Released by the US Department of War under the PURSUE program (Presidential Unsealing and Reporting System for UAP Encounters). Official portal: <https://www.war.gov/UFO/> — additional files drop on a rolling basis. Four releases so far (334 records combined per the site's own CSV).
+Released by the US Department of War under the PURSUE program (Presidential Unsealing and Reporting System for UAP Encounters). Official portal: <https://www.war.gov/UFO/> — additional files drop on a rolling basis. Five releases so far (416 files mirrored across them).
 
 ### Release 01 (May 8, 2026)
 
@@ -130,13 +131,27 @@ Community mirrors have not kept up — the Release-01 repos are unchanged and th
 
 The good news: for Release 04, **war.gov itself offers bulk zip bundles** (e.g. `release_04_documents_071026.zip` ~238 MB and `uap_release04_videos_071026.zip` ~1.5 GB), so a browser on a residential IP can grab the whole drop in two downloads — no more per-file scraping. The Akamai rules are unchanged, so curl/cloud egress still 403s; and the video zip names files by DVIDS **media-asset-id** (`DOD_…`), so you still need the dvidshub video-id → asset-id mapping (via each video's `.m3u8`) to match them back to the CSV rows. The CSV now serves with a `?release=4` query parameter but keeps the same 29-column layout as Release 03.
 
+### Release 05 (Aug. 7, 2026)
+
+The fifth drop. **41 files — 22 PDFs, 3 images, 16 videos, no audio — ~646 MB on disk** (19 Department of War, 17 FBI, 2 CIA, 2 Department of State, 1 Executive Office of the President — the first EOP record in the series). Highlights: the CIA's 1965 "Unidentified Flying Object Reported near Puerto Rico" report and briefing notes for Walter Elder, two November 1963 **State Department cables from Brazil** plus the **National Aeronautics and Space Council inquiry** into the Bahia incident they describe, the Department of War's 1953 film analysis of unidentified objects, an intelligence review of the 1946 **"Ghost Rocket"** incidents and an Air Materiel Command flying-object report, FBI FD-302 witness reports on 2002 and 2023 **triangle** sightings with the Bureau's digital renderings of them, and 15 Department of War sensor clips plus one FBI video.
+
+#### Acquisition: bulk zips again (mirrored 2026-08-27)
+
+Same path as Release 04 — **war.gov ships the drop as two zips**: `release_05_Aug_07_documents.zip` (25 documents + images, already under their war.gov canonical names) and `uap_videos_080726.zip` (16 videos under raw CloudFront `DOD_111887xxx.mp4` names). Download both from a browser on a residential IP; Akamai still refuses curl and cloud egress.
+
+- To rename the videos you no longer need the `.m3u8` detour: each CSV row carries a **DVIDS Video ID**, and the plain page `https://www.dvidshub.net/video/{id}` exposes the CloudFront asset path (`…/{DOD_nnn}/{DOD_nnn}.mp4`) in its HTML — curl-able, no login. All 16 resolved 1:1 against the zip contents, and every DVIDS page title matched its CSV title.
+- The CSV (`uap-data.csv?release=5`) keeps the 29-column Release-03 layout.
+- Community mirrors were not re-surveyed for this release; with war.gov shipping its own zips, the portal itself remains the practical bulk source.
+
 ---
 
 ## 🇧🇷 Brazil — Arquivo Nacional
 
-Brazilian Air Force / Ministry of Defense files including the Operação Prato / Colares (1977–78) materials. ~20,000+ pages on ~893 sightings, declassifications rolling since 2009.
+Brazilian Air Force / Ministry of Defense files including the Operação Prato / Colares (1977–78) materials. The Arquivo Nacional catalogues 893 documents (1952–2023), with declassifications rolling since 2009; the IA item below holds a subset — **236 files / 4,785 pages** once its RAR archives are unpacked. (An earlier version of this guide repeated a "~20,000+ pages" figure that nothing in the mirror supports.)
 
-**[IA: `BrazilianUFOFiles`](https://archive.org/details/BrazilianUFOFiles)** — multi-item collection (142 zipped sub-items + their metadata + OCR derivatives). Originally pulled 1.5 GB / 846 files with default flags; re-ran with `--source=original` to get the 232 actual source PDFs (~1.9 GB) and skip OCR/thumbnail/metadata noise.
+**[IA: `BrazilianUFOFiles`](https://archive.org/details/BrazilianUFOFiles)** — multi-item collection (142 zipped sub-items + their metadata + OCR derivatives). Originally pulled 1.5 GB / 846 files with default flags; re-ran with `--source=original` to get the 232 originals — 231 PDFs plus IA's own `__ia_thumb.jpg` — (~1.9 GB) and skip OCR/thumbnail/metadata noise.
+
+**Don't stop at the PDFs.** The item also ships **five RAR archives of page scans** that are easy to overlook next to the loose PDFs — they hold 224 pages, including *both parts* of the Operação Prato mission reports (151 + 54 pages), Diretriz Específica 04/89 (the UFO-reporting procedure for airspace-control units), the confidential NPA-09 procedure with its witness questionnaire, and archived press clippings. Reassemble each with `img2pdf`, which embeds the JPEG scans verbatim so every page stays byte-identical to the source. And drop `__ia_thumb.jpg` from any index you build: IA generates one per item and `ia download` pulls it alongside the originals, so it turns up as a fake "image" in every IA-sourced folder.
 
 Official source: <http://sian.an.gov.br/sianex/consulta/login.asp>, reference code `BR DFANBSB ARX`. SIAN is session-based and fragile to scrape — use IA as the bulk source.
 
@@ -272,4 +287,4 @@ If you find a bulk source for any of these, open an issue / PR.
 
 ## Provenance
 
-This guide was assembled by attempting each of the above downloads in sequence on 2026-05-15, with the PURSUE Release 02 section added 2026-05-25, Release 03 added 2026-06-15/07-16, and Release 04 added 2026-07-16. Status reflects what worked *those days* — LFS budgets get topped up, mirrors get taken down, Akamai rules change. If you find a mirror that's flipped status, PRs welcome.
+This guide was assembled by attempting each of the above downloads in sequence on 2026-05-15, with the PURSUE Release 02 section added 2026-05-25, Release 03 added 2026-06-15/07-16, Release 04 added 2026-07-16, and Release 05 added 2026-08-29 (mirrored 2026-08-27). Status reflects what worked *those days* — LFS budgets get topped up, mirrors get taken down, Akamai rules change. If you find a mirror that's flipped status, PRs welcome.
